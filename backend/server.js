@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 4001;
 app.use(cors());
 app.use(express.json());
 
-const db = new sqlite3.Database('./lumpy.db');
+const dbPath = process.env.DATABASE_PATH || './lumpy.db';
+const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS articles (
@@ -188,6 +189,11 @@ app.delete('/api/articles/:id', (req, res) => {
   );
 });
 
-app.listen(PORT, () => {
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

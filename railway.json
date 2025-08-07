@@ -1,0 +1,31 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  },
+  "services": [
+    {
+      "name": "backend",
+      "buildCommand": "cd backend && npm install",
+      "startCommand": "cd backend && node server.js",
+      "healthcheckPath": "/api/health",
+      "envVars": {
+        "PORT": "${{PORT}}",
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "frontend", 
+      "buildCommand": "cd frontend && npm install && npm run build",
+      "startCommand": "cd frontend && npx serve -s dist -l $PORT",
+      "envVars": {
+        "PORT": "${{PORT}}"
+      }
+    }
+  ]
+}

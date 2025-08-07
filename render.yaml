@@ -1,0 +1,28 @@
+# Render.com deployment configuration
+services:
+  # Backend API
+  - type: web
+    name: lumpy-pocket-api
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4001
+    
+  # Frontend static site
+  - type: web
+    name: lumpy-pocket-web
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://lumpy-pocket-api.onrender.com/api/*

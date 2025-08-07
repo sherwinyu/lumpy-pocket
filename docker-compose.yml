@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: lumpy-backend
+    environment:
+      - NODE_ENV=production
+      - PORT=4001
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "4001:4001"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: lumpy-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  data:

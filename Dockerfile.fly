@@ -1,0 +1,35 @@
+# Multi-stage Dockerfile for Fly.io
+FROM node:20-alpine as frontend-builder
+
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# Backend stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install serve for static files
+RUN npm install -g serve
+
+# Copy backend
+COPY backend/package*.json ./
+RUN npm ci --only=production
+COPY backend/ ./
+
+# Copy built frontend
+COPY --from=frontend-builder /app/frontend/dist ./public
+
+# Create data directory
+RUN mkdir -p /app/data
+
+EXPOSE 8080
+
+# Start script
+COPY fly-start.sh ./
+RUN chmod +x fly-start.sh
+
+CMD ["./fly-start.sh"]
