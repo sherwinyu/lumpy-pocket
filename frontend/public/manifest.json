@@ -1,0 +1,22 @@
+{
+  "short_name": "Lumpy Pocket",
+  "name": "Lumpy Pocket - Save Articles for Later",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#2c3e50",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#2c3e50",
+  "description": "Save articles to read later"
+}
