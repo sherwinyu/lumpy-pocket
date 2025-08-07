@@ -4,8 +4,9 @@ services:
   - type: web
     name: lumpy-pocket-api
     env: node
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && node server.js
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -16,8 +17,9 @@ services:
   - type: web
     name: lumpy-pocket-web
     env: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
     headers:
       - path: /*
         name: X-Frame-Options
